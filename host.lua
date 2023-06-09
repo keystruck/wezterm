@@ -18,10 +18,12 @@ function M.apply_config (config)
     config.initial_rows = 48
 
     config.window_background_image = '/Users/Dave/04_Archived/Desktops/bluesBW.png'
+    -- config.window_background_image = '/Users/Dave/04_Archived/Desktops/black_roseBW.png'
+    -- config.window_background_image = '/Users/Dave/04_Archived/Desktops/pink_roseBW.png'
     config.window_background_image_hsb = {
         brightness = 0.6,
     }
-    config.text_background_opacity = .8     -- lower -> more bg visible under text
+    config.text_background_opacity = .85 -- lower -> more bg visible under text
 
     -- config.font = wz.font ('Rec Mono Casual', {weight="Light"})
     config.font = wz.font ('MonoLisa Liga', {weight="Light"})
