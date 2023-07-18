@@ -45,6 +45,7 @@ table.insert (M.keys, {
 --  config.use_ime = false should do this on mac but doesn't seem to.
 --  https://wezfurlong.org/wezterm/config/lua/config/macos_forward_to_ime_modifier_mask.html
 ------------------------------------------------------------------------------
+---[[
 for k in ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"):gmatch (".") do
   table.insert(M.keys, {
     key = "mapped:" .. k,
@@ -52,6 +53,7 @@ for k in ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"):gmatch (".") d
     action = {SendKey = {key = k, mods = "ALT"}},
   })
 end
+--]]
 
 
 ------------------------------------------------------------------------------
@@ -97,9 +99,9 @@ table.insert (M.keys, {
   action  = action {CloseCurrentTab = {confirm = true}},
 })
 
--- activate last tab: <cmd-;>
+-- activate last tab: <cmd-:>
 table.insert (M.keys, {
-  key     = "mapped:;",
+  key     = "mapped::",
   mods    = "SUPER",
   action  = action.ActivateLastTab,
 })
@@ -172,21 +174,40 @@ end
 -- pane navigation by direct selection, pane #i: <leader>i
 for i  =  1, 9
 do
-  table.insert (M.keys, {
-    key = tostring(i),
-    mods = "LEADER",
-    action = action {ActivatePaneByIndex = i-1},
-  })
+    table.insert (M.keys, {
+        key = tostring(i),
+        mods = "LEADER",
+        action = action {ActivatePaneByIndex = i-1},
+    })
 end
 
 -- pane navigation by direct selection (alt), pane #i: <alt-i>
 for i  =  1, 9
 do
-  table.insert (M.keys, {
-    key = tostring(i),
-    mods = "ALT",
-    action = action {ActivatePaneByIndex = i-1},
-  })
+    -- regular Dvorak layout
+    table.insert (M.keys, {
+        key = tostring(i),
+        mods = "ALT",
+        action = action {ActivatePaneByIndex = i-1},
+    })
+
+    -- Programmer Dvorak layout, with SHIFT modifier
+    table.insert (M.keys, {
+        key = "mapped:" .. tostring(i),
+        mods = "SHIFT|ALT",
+        action = action {ActivatePaneByIndex = i-1},
+    })
+end
+
+-- Same, for Programmer Dvorak keyboard without SHIFT modifier
+local unshifted = "()}+{]&!="       -- 123456789, no zero
+for i = 1, unshifted:len()
+do
+    table.insert (M.keys, {
+        key = "mapped:" .. unshifted:sub(i,i),  -- can't bracket index strings
+        mods = "ALT",
+        action = action {ActivatePaneByIndex = i-1},
+    })
 end
 
 -- pane navigation by direct selection using displayed numbers (mnemonic: 'go')
@@ -221,7 +242,7 @@ for k, dir in pairs {
   })
 end
 
--- fine pane resizing: <leader><ctrl><dir> [Dvorak mappings]
+-- fine pane resizing: <:><ctrl><dir> [Dvorak mappings]
 for k, dir in pairs {
   ["d"] = "Left",
   ["n"] = "Right",
