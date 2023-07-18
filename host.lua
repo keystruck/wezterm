@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
---  host.lua v. 20230608.1
+--  host.lua v. 20230627.1
 --  host-specific configuration for wezterm, sourced by wezterm.lua
 ------------------------------------------------------------------------------
 local wz = require 'wezterm'
@@ -18,6 +18,7 @@ function M.apply_config (config)
     config.initial_rows = 48
 
     config.window_background_image = '/Users/Dave/04_Archived/Desktops/bluesBW.png'
+    -- config.window_background_image = '/Users/Dave/04_Archived/Desktops/rose_hips.png'
     -- config.window_background_image = '/Users/Dave/04_Archived/Desktops/black_roseBW.png'
     -- config.window_background_image = '/Users/Dave/04_Archived/Desktops/pink_roseBW.png'
     config.window_background_image_hsb = {
@@ -25,12 +26,11 @@ function M.apply_config (config)
     }
     config.text_background_opacity = .85 -- lower -> more bg visible under text
 
-    -- config.font = wz.font ('Rec Mono Casual', {weight="Light"})
-    config.font = wz.font ('MonoLisa Liga', {weight="Light"})
+    config.font = wz.font ('MonoLisa Variable', {weight="Light"})
     config.font_size   = 20
-    -- harfbuzz_features = {"calt=0", "clig=0", "liga=0"},  -- disable ligatures
+    config.harfbuzz_features = {"calt=0", "clig=0", "liga=0"}  -- disable ligatures
 
-    config.use_ime = false
+    -- config.use_ime = false
 end
 
 -- used in select.lua
@@ -45,12 +45,11 @@ M.cmds  = {
 
 -- Initial pane layout
 wz.on ('gui-startup', function (cmd)
-    local tab, lpane, window = wz.mux.spawn_window (cmd or {})
-    local rpane = lpane:split  {direction = 'Right', size = 0.500 }
-    local rmpane = rpane:split {direction = 'Bottom',  size = 0.382 }
-    local rbpane = rmpane:split  {direction = 'Bottom',  size = 0.382 }
+    local tab, pane, window = wz.mux.spawn_window (cmd or {})
+    local ltpane = pane:split  {direction = 'Left', size = 0.500 }
+    local lbpane = ltpane:split {direction = 'Bottom',  size = 0.382 }
     window:gui_window():maximize()
-    lpane:activate()
+    pane:activate()     -- right pane
 end)
 
 return M
